@@ -113,4 +113,51 @@ class _CreateUpdateTodoScreenState extends State<CreateUpdateTodoScreen> {
     );
   }
 
+  String createTodoItemMutation() {
+    return '''
+ mutation CreateTodoItem(\$input: CreateTodoInput!) {
+   createTodo(input: \$input) {
+     id
+     title
+   }
+ }
+ ''';
+  }
+
+  void createTodo(RunMutation runMutation) {
+    final todoItemTitle = _titleController.text;
+    final isTodoItemCompleted = _isCompleted.value;
+    runMutation({
+      'input': {
+        'title': todoItemTitle,
+        'completed': isTodoItemCompleted,
+      }
+    });
+  }
+
+  void updateTodo({
+    required RunMutation runMutation,
+    required String todoId,
+  }) {
+    final todoItemTitle = _titleController.text;
+    final isTodoItemCompleted = _isCompleted.value;
+    runMutation({
+      'id': todoId,
+      'input': {
+        'title': todoItemTitle,
+        'completed': isTodoItemCompleted,
+      }
+    });
+  }
+
+  String updateTodoItemMutation() {
+    return '''
+ mutation UpdateTodoItem(\$id: ID!, \$input: UpdateTodoInput!) {
+   updateTodo(id: \$id, input: \$input) {
+     id
+     title
+   }
+ }
+ ''';
+  }
 }
