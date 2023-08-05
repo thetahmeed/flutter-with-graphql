@@ -1,8 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:graphql_with_flutter/ui/home_page.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:graphql_with_flutter/ui/todo_list_page.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'data/models/my_model.dart';
+import 'ui/cerate_update_totd_page.dart';
+import 'ui/todo_details_page.dart';
+
+void main() async {
+  // We need this for cashing
+  await initHiveForFlutter();
+
+  //This is a graphqlclient
+  final GraphQLClient graphQLClient = GraphQLClient(
+    link: HttpLink("https://graphqlzero.almansi.me/api"),
+    cache: GraphQLCache(
+      store: HiveStore(),
+    ),
+  );
+
+  final client = ValueNotifier(graphQLClient);
+
+  runApp(
+    GraphQLProvider(
+      client: client,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
