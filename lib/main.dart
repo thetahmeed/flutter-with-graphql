@@ -39,7 +39,19 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'GraphQL with Flutter'),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => const TodoListPage(),
+        '/details': (context) {
+          final todoId = ModalRoute.of(context)?.settings.arguments as String;
+          return TodoDetailScreen(todoId: todoId);
+        },
+        '/create-update-todo': (context) {
+          final todoItem =
+              ModalRoute.of(context)?.settings.arguments as TodoModel?;
+          return CreateUpdateTodoScreen(todo: todoItem);
+        }
+      },
     );
   }
 }
